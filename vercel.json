@@ -1,0 +1,17 @@
+{
+  "framework": "vite",
+  "regions": [
+    "icn1"
+  ],
+  "functions": {
+    "api/agent.js": {
+      "maxDuration": 60
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
