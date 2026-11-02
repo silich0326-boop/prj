@@ -46,7 +46,7 @@ export default function Home({ places, Scene }) {
         <label>1인 예산<select value={budget} onChange={e=>setBudget(e.target.value)}>{['예산 미정','1만 원 이하','3만 원 이하','5만 원 이하'].map(x=><option key={x}>{x}</option>)}</select></label>
         <button className="btn btn-dark" type="submit">AI에게 물어보기 <i className="bi bi-arrow-up-right"/></button>
       </form>
-      <p className="plan-note"><i className="bi bi-info-circle"/> 아래에서 공식 안내로 확인한 도민 입장료를 비교할 수 있습니다. AI 추천은 연결 준비 중이며, 전체 여행 예산 충족 여부는 별도 확인이 필요합니다.</p>
+      <p className="plan-note"><i className="bi bi-info-circle"/> 아래에서 공식 안내로 확인한 도민 입장료를 비교할 수 있습니다. AI에게 조건에 맞는 나들이를 물어보세요. 전체 여행 예산 충족 여부는 별도 확인이 필요합니다.</p>
     </section>
     <section className="section resident-suggestions">
       <div className="section-title"><div><small className="eyebrow">A LITTLE CLOSER TO HOME</small><h2>이런 나들이는 어때요?</h2></div></div>

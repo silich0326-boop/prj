@@ -1,0 +1,208 @@
+{
+  "date": "2026-11-02T06:27:04.294Z",
+  "model": "claude-sonnet-5-5",
+  "base": "https://jeju-local-trip.vercel.app",
+  "results": [
+    {
+      "question": "제주시 지금 날씨 어때?",
+      "status": 200,
+      "seconds": 4,
+      "answer": "제주시는 지금(11월 2일 15시 기준) 맑고 기온은 18℃예요. 비는 오지 않고 강수확률도 0%입니다. 저녁에는 점점 쌀쌀해져서 17시에 17℃, 18시에 16℃, 20시에는 15℃까지 내려갈 예정이에요. 예보는 20시까지만 확인되니, 그 뒤 시간은 말씀드릴 수 없어요. 야외 나들이에 좋은 날씨이니 얇은 겉옷을 챙겨 가세요.",
+      "steps": [
+        {
+          "tool": "get_weather",
+          "args": {
+            "place": "제주시"
+          },
+          "count": 6,
+          "status": "success"
+        }
+      ]
+    },
+    {
+      "question": "관덕정이 어떤 국가유산이야?",
+      "status": 200,
+      "seconds": 6,
+      "answer": "관덕정은 국가유산청 검색 결과에서 **'제주 관덕정'이라는 보물**로 나옵니다. 소재지는 제주시이고, 좌표는 위도 33.5134, 경도 126.5215입니다.\n\n조회된 자료에는 건립 시기나 건축 특징 같은 상세 설명이 없어서 그 내용은 말씀드리지 않겠습니다. 입장료나 도민 혜택, 방문 가능 여부는 이번에 확인하지 않았습니다. 필요하시면 방문일을 알려주세요. 혜택 DB와 날씨를 같이 확인해 드리겠습니다.",
+      "steps": [
+        {
+          "tool": "search_heritage",
+          "args": {
+            "keyword": "관덕정"
+          },
+          "count": 1,
+          "status": "success"
+        }
+      ]
+    },
+    {
+      "question": "내일 서귀포에 비 오면 해녀 문화를 체험할 실내 장소 추천해줘",
+      "status": 200,
+      "seconds": 14,
+      "answer": "내일은 2026-11-03입니다. 날씨 도구는 오늘 20시까지의 서귀포 예보(맑음, 강수 없음)만 줘서, 내일 비가 올지는 확인하지 못했습니다.\n\n- **혜택이 확인된 곳:** 제주해녀박물관(제주시 구좌읍)은 실내 중심입니다. 성인(25~64세) 1인 입장료가 정가 1,100원인데 도민은 550원입니다. 주민등록 도민이거나 재외도민증 소지자가 대상이고, 신분증과 제주거주 증명서를 확인합니다. 출처는 https://www.jeju.go.kr/haenyeo/exhibit/guide.htm이고 확인일은 2026-11-02입니다. 서귀포가 아니라 제주시에 있어서 서귀포에서 차로 꽤 이동해야 합니다.\n- **서귀포권 대안:** 성산포 해녀물질공연장(성산읍 일출로 284-34)이 검색되지만, 혜택 DB에는 등록된 자료가 없습니다. 그래서 요금과 도민 혜택은 확인할 수 없고, 실내 여부와 공연 운영도 확인하지 못했습니다.\n- **유의사항:** 요금은 입장료만 해당하고 교통·식사·체험·특별전 비용은 빠져 있습니다. 유효기간이 명시돼 있지 않아 무기한 유효로 볼 수 없고, 이 조회가 실시간 공식 요금 검증도 아닙니다. 내일 영업 여부도 확정되지 않았으니 방문 전에 공식 안내로 확인해 주세요.",
+      "steps": [
+        {
+          "tool": "get_weather",
+          "args": {
+            "place": "서귀포시"
+          },
+          "count": 6,
+          "status": "success"
+        },
+        {
+          "tool": "search_tour_places",
+          "args": {
+            "keyword": "해녀",
+            "contentTypeId": "14"
+          },
+          "count": 2,
+          "status": "success"
+        },
+        {
+          "tool": "search_resident_benefits",
+          "args": {
+            "keyword": "해녀",
+            "region": "서귀포시",
+            "visitDate": "2026-11-03",
+            "rows": 10
+          },
+          "count": 0,
+          "status": "success"
+        },
+        {
+          "tool": "search_resident_benefits",
+          "args": {
+            "keyword": "성산포 해녀물질공연장",
+            "visitDate": "2026-11-03",
+            "rows": 5
+          },
+          "count": 0,
+          "status": "success"
+        },
+        {
+          "tool": "search_resident_benefits",
+          "args": {
+            "keyword": "제주해녀박물관",
+            "visitDate": "2026-11-03",
+            "rows": 5
+          },
+          "count": 1,
+          "status": "success"
+        }
+      ]
+    },
+    {
+      "question": "제주에 있는 에펠탑 알려줘",
+      "status": 200,
+      "seconds": 7,
+      "answer": "제주 에펠탑은 찾지 못했습니다. TourAPI에서 \"에펠탑\", \"에펠\", \"에펠탑 모형 포토존\"으로 검색했는데 결과가 모두 없었습니다. 그래서 제주에 에펠탑이나 비슷한 조형물이 있는지 확인할 수 없고, 있다고 말씀드릴 수도 없습니다.\n\n혹시 다른 이름이나 대략적인 위치(읍면동, 카페·테마파크 등)를 알려주시면 다시 찾아보겠습니다. \"이국적인 포토 명소\"처럼 비슷한 분위기의 장소를 찾는 거라면, 원하시는 방향을 말씀해 주세요. 도민 혜택이 필요하시면 방문일도 알려주세요.",
+      "steps": [
+        {
+          "tool": "search_tour_places",
+          "args": {
+            "keyword": "에펠탑"
+          },
+          "count": 0,
+          "status": "success"
+        },
+        {
+          "tool": "search_tour_places",
+          "args": {
+            "keyword": "에펠",
+            "contentTypeId": "12"
+          },
+          "count": 0,
+          "status": "success"
+        },
+        {
+          "tool": "search_tour_places",
+          "args": {
+            "keyword": "에펠탑 모형 포토존"
+          },
+          "count": 0,
+          "status": "success"
+        }
+      ]
+    },
+    {
+      "question": "해녀박물관 도민 요금과 준비할 서류 알려줘",
+      "status": 200,
+      "seconds": 6,
+      "answer": "제주해녀박물관(구좌읍)의 성인 25~64세 1인 입장료는 정가 1,100원이고, 도민 요금은 550원입니다. 이 요금에는 교통·식사·체험·특별전 비용이 들어 있지 않습니다. 대상은 제주도에 주민등록이 된 주민이고, 재외도민증 소지자도 50% 감면을 받을 수 있습니다. 준비할 서류는 신분증과 제주거주 증명서이고, 현장에서 확인한 뒤 도민 요금을 적용합니다. 도민이라고 전부 무료인 것은 아닙니다. 12세 이하와 65세 이상 등 별도 면제 대상은 공식 안내에서 확인하세요.\n\n이 정보는 2026-11-02에 확인한 자료입니다(출처: https://www.jeju.go.kr/haenyeo/exhibit/guide.htm). 유효기간은 명시돼 있지 않고 실시간 요금 검증도 아니니, 방문 전에 공식 안내를 다시 확인하세요. 방문일을 알려주시면 휴관 여부도 확인해 드릴게요. 지금은 방문일이 없어서 영업 여부를 확정할 수 없습니다.",
+      "steps": [
+        {
+          "tool": "search_resident_benefits",
+          "args": {
+            "keyword": "해녀박물관",
+            "rows": 5
+          },
+          "count": 1,
+          "status": "success"
+        }
+      ]
+    },
+    {
+      "question": "2026년 11월 3일 제주현대미술관 본관 가도 돼?",
+      "status": 200,
+      "seconds": 12,
+      "answer": "11월 3일에는 제주현대미술관 본관에 가지 않는 게 좋겠습니다. 혜택 DB에 본관과 박광진관이 11월 3일부터 5일까지 임시휴관한다고 등록돼 있습니다. 출처는 [제주현대미술관 공지](https://www.jeju.go.kr/jejumuseum/news/news.htm?act=view&seq=2037370)입니다.\n\n참고로 도민 혜택 자료는 이렇습니다. 성인 25~64세 1인 입장료만 해당하고, 일반 2,000원이 도민 50% 감면으로 1,000원입니다. 주민등록이 제주도에 있는 분이 신분증을 지참해야 하고, 특별전과 교통·식사 비용은 포함되지 않습니다. 확인일은 2026-11-02이고 유효기간은 명시돼 있지 않으며, 실시간 요금 확인은 아닙니다. 출처는 [관람 안내](https://www.jeju.go.kr/jejumuseum/guide/viewing.htm)입니다.\n\n한경면에서 방문일에 갈 수 있는 다른 등록 장소는 조회되지 않았습니다. 11월 6일 이후로 일정을 옮기거나 다른 지역의 실내 장소를 찾아볼까요?",
+      "steps": [
+        {
+          "tool": "search_resident_benefits",
+          "args": {
+            "keyword": "제주현대미술관",
+            "visitDate": "2026-11-03",
+            "region": "제주시",
+            "rows": 5
+          },
+          "count": 1,
+          "status": "success"
+        },
+        {
+          "tool": "get_weather",
+          "args": {
+            "place": "제주시"
+          },
+          "count": 6,
+          "status": "success"
+        },
+        {
+          "tool": "search_resident_benefits",
+          "args": {
+            "keyword": "",
+            "visitDate": "2026-11-03",
+            "area": "한경면",
+            "rows": 5
+          },
+          "count": 1,
+          "status": "success"
+        }
+      ]
+    },
+    {
+      "question": "제주 에펠탑 도민 할인 얼마야?",
+      "status": 200,
+      "seconds": 6,
+      "answer": "「에펠탑」으로 검색했는데 혜택 DB에 등록된 자료가 없고, 관광 정보에서도 해당 장소가 나오지 않았습니다. 그래서 도민 할인 금액은 확인할 수 없습니다. 할인이 없다거나 무료라는 뜻은 아니고, 등록된 자료가 없다는 뜻입니다.\n\n혹시 다른 이름으로 불리는 장소를 말씀하신 거라면 정확한 장소명이나 지역을 알려주세요. 다시 조회하겠습니다. 방문 예정일도 알려주시면 함께 확인하겠습니다. 요금은 성인 25~64세 개인 입장료 기준으로만 안내할 수 있습니다.",
+      "steps": [
+        {
+          "tool": "search_resident_benefits",
+          "args": {
+            "keyword": "에펠탑",
+            "rows": 5
+          },
+          "count": 0,
+          "status": "success"
+        },
+        {
+          "tool": "search_tour_places",
+          "args": {
+            "keyword": "에펠탑"
+          },
+          "count": 0,
+          "status": "success"
+        }
+      ]
+    }
+  ]
+}
