@@ -1,8 +1,11 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { askAgent } from '../api/client.js'
+import { switchCollection, guestBookmarks } from '../lib/collection-scope.js'
 export const useAppStore = create(persist((set,get) => ({
-  saved: [],
+  saved: [], savedOwner:null, savedBuckets:{}, lastGuestOwner:null,
+  switchUser: user => set(s=>switchCollection(s,user)),
+  importGuest: () => set(s=>({saved:[...new Map([...s.saved,...guestBookmarks(s)].map(p=>[p.id,p])).values()]})),
   replaceSaved: saved => set({saved}),
   toggle: p => set(s => ({saved:s.saved.some(x=>x.id===p.id) ? s.saved.filter(x=>x.id!==p.id) : [...s.saved,p]})),
   messages: [], chatLoading:false, chatError:'',
@@ -20,4 +23,4 @@ export const useAppStore = create(persist((set,get) => ({
       set(s=>({chatError:e.message,messages:s.messages.map(m=>m===entry?{...m,failed:true}:m)}))
     } finally { set({chatLoading:false}) }
   }
-}), {name:'jeju-studio-v2', partialize:s=>({saved:s.saved})}))
+}), {name:'jeju-studio-v2', partialize:s=>({saved:s.saved,savedOwner:s.savedOwner,savedBuckets:s.savedBuckets,lastGuestOwner:s.lastGuestOwner})}))
