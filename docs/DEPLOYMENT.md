@@ -24,4 +24,7 @@
 - 다른 브라우저는 새 익명 사용자라 기존 개인 보관함은 보이지 않음
 - AI 키 수령 후 네 가지 에이전트 테스트 실행
 
-배포 주소는 실제 배포 후 README에 기록합니다. .env.local은 업로드하지 않습니다.
+현재 고정 주소: https://jeju-local-trip.vercel.app/
+저장소: https://github.com/silich0326-boop/prj
+
+GitHub main 푸시 시 Vercel 자동 배포가 연결되어 있습니다. 환경변수만 바꾼 경우에도 재배포해야 적용됩니다. .env.local은 업로드하지 않습니다.

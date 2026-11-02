@@ -1,74 +1,149 @@
 # 제주 스토리
 
-제주의 문화·자연에서 콘텐츠 IP 아이디어를 발견하는 Vite + React 앱입니다. 기본 콘텐츠와 3D 지도는 키 없이 동작하며 공공데이터 및 AI는 실제 서버 연결 후 사용할 수 있습니다.
+**제주도민이 자신에게 적용되는 혜택을 확인하고, 조건에 맞는 제주 문화·여가 나들이를 계획하도록 돕는 여행 웹앱입니다.**
+
+- [배포 홈페이지](https://jeju-local-trip.vercel.app/)
+- [GitHub 저장소](https://github.com/silich0326-boop/prj)
+- [3분 발표 대본과 시연 순서](docs/presentation.md)
+- [배포 설정](docs/DEPLOYMENT.md)
+- [AI 최종 검증 체크리스트](docs/AGENT-VALIDATION.md)
+
+## 기획 의도
+
+제주도민에게 제공되는 관람료 감면은 여러 시설의 홈페이지에 흩어져 있습니다. 할인율뿐 아니라 거주 증빙, 나이, 방문일, 휴관 여부까지 확인해야 실제 나들이에 활용할 수 있습니다.
+
+제주 스토리는 제주 주민을 대상으로 문화시설과 지역 콘텐츠를 탐색하고, 공식 출처가 있는 혜택을 비교·저장하도록 만들었습니다. 해녀 문화, 제주의 생활사, 돌 문화와 미술관을 중심으로 제주 문화 IP와 주민의 문화생활을 연결합니다.
+
+AI는 장소·날씨·국가유산·혜택 DB를 도구로 조회하도록 구현했습니다. **실제 AI 추천 성공 여부는 키 연결 후 검증할 예정이며, 현재 완료된 기능으로 표시하지 않습니다.**
+
+## 구현 및 검증 상태
+
+2026.11.02 점검 기준입니다. 데이터 건수는 점검 당시 응답이며 이후 달라질 수 있습니다.
+
+| 항목 | 상태 | 확인 내용 |
+|---|---|---|
+| React·Router·Store | 구현 | 페이지·컴포넌트·라우터·공유 상태 분리 |
+| 관광정보 API | 배포본 조회 확인 | 해녀 검색 3건 |
+| 기상청 단기예보 API | 배포본 조회 확인 | 제주시 시간별 예보 6건 |
+| 국가유산 API | 배포본 조회 확인 | 관덕정 검색 1건 |
+| 도민 혜택 DB | 배포본 조회 확인 | 공식 안내로 조사한 5곳 |
+| 즐겨찾기 | 저장·조회 확인 | 브라우저 저장과 Supabase 업로드·불러오기 |
+| 모바일 | 점검 | 390px 홈·보관함·AI 화면의 가로 넘침 및 메뉴 이동 확인 |
+| AI 에이전트 | 코드·모의 테스트 완료 | 실제 LLM 답변·연속 도구 호출은 미검증 |
+| Three.js | 기본 동작 확인 | 섬 회전·확대·예시 핀 선택. API 좌표 연동 미구현 |
+| 배포 | 완료 | 고정 Production 주소와 GitHub 자동 배포 |
+
+## 사용자 흐름
+
+1. 홈 또는 탐색에서 혜택 DB 목록을 확인합니다. ‘Supabase 조회 완료’ 표시로 실제 DB 조회와 조사 자료 표시를 구분합니다.
+2. 장소·지역·공간·성인 도민 입장료 조건으로 목록을 좁힙니다.
+3. 카드에서 일반/도민 요금, 증빙, 확인일, 공식 출처와 휴관 안내를 확인합니다.
+4. 북마크한 장소는 보관함에서 Supabase에 업로드하거나 다시 불러올 수 있습니다.
+5. 홈의 나들이 조건을 AI 입력창으로 전달할 수 있습니다. AI 키 연결 전에는 설정 안내가 표시됩니다.
+
+## 공공 API 3개와 AI 도구
+
+| 데이터 | 기관 | 사용 목적 | AI 도구 |
+|---|---|---|---|
+| [국문 관광정보](https://www.data.go.kr/data/15101578/openapi.do) | 한국관광공사 | 제주 장소 검색·위치·주소 | `search_tour_places` |
+| [단기예보](https://www.data.go.kr/data/15084084/openapi.do) | 기상청 | 시간별 기온·하늘·강수확률 | `get_weather` |
+| [국가유산 검색](https://www.khs.go.kr/cha/SearchKindOpenapiList.do?ccbaCtcd=50&pageUnit=10&pageIndex=1) | 국가유산청 | 제주 국가유산 조회 | `search_heritage` |
+| 공식 안내 조사 자료 | 시설별 공식 홈페이지 → Supabase | 도민 요금·증빙·휴관 확인 | `search_resident_benefits` |
+
+**공공 API는 3개이며, 도민 혜택 DB는 별도의 네 번째 도구입니다.** 직접 조사한 DB를 네 번째 공공 API로 계산하지 않습니다.
+
+브라우저는 `/api/*` 서버 함수를 거쳐 공공 API와 AI를 호출합니다. 화면과 에이전트가 `server/`의 조회 함수를 공유합니다. 공공데이터 인증키와 AI 키는 브라우저 코드에 넣지 않습니다.
+
+## 공식 출처가 있는 혜택 5곳
+
+확인일은 2026.11.02이며 성인 25~64세 개인 입장료 기준입니다. 아동·동반인·단체·특별전의 가격으로 확대 적용하지 않습니다.
+
+| 장소·공식 안내 | 일반 요금 | 도민 요금 | 참고 |
+|---|---:|---:|---|
+| [해녀박물관](https://www.jeju.go.kr/haenyeo/exhibit/guide.htm) | 1,100원 | 550원 | 신분증·거주 증빙 확인 |
+| [민속자연사박물관](https://www.jeju.go.kr/museum/guidance/view.htm) | 2,000원 | 1,000원 | 구체적 증빙서류는 별도 확인 필요 |
+| [김창열미술관](https://kimtschang-yeul.jeju.go.kr/cnt/cntManagerView.do?idx=12&menuNum=7200) | 2,000원 | 1,000원 | 대상별 증빙서류 지참 |
+| [현대미술관 본관](https://www.jeju.go.kr/jejumuseum/guide/viewing.htm) | 2,000원 | 1,000원 | 공식 50% 감면율로 계산, 특별전 등 별도 조건 |
+| [돌문화공원](https://www.jeju.go.kr/jejustonepark/intro/guide.htm) | 5,000원 | 2,500원 | 공식 50% 감면율로 계산, 중복 할인 불가 |
+
+현대미술관 본관·박광진관의 [2026.11.03~11.05 임시휴관 공지](https://www.jeju.go.kr/jejumuseum/news/news.htm?act=view&seq=2037370)를 별도 기록했습니다. 매주 월요일 정기휴관과 공휴일 예외도 확인해야 합니다. 명시된 휴관이 없다고 영업을 보장하지 않습니다.
+
+혜택 DB는 실시간 요금 수집 서비스가 아닙니다. 공식 출처·확인일·유효기간 미명시 여부를 함께 표시하며, 방문 전 최신 안내를 확인해야 합니다. 교통·식사·체험 비용은 입장료에 포함하지 않습니다.
 
 ## 실행
 
-Node.js 설치 후 이 폴더에서 `npm install`, `npm run dev`를 실행하고 표시되는 localhost 주소로 접속하세요. Windows에서는 `start.cmd`를 더블클릭할 수 있습니다. **index.html 더블클릭으로는 실행되지 않습니다.**
+Node.js 22.x에서 프로젝트 폴더를 열고 실행합니다.
 
-## 단계별 확인
+```powershell
+npm ci
+Copy-Item .env.example .env.local
+npm run dev -- --port 5174
+```
 
-1. 홈 화면, 탐색 검색/분류, 보관함 저장과 새로고침 후 유지 확인
-2. `.env.example`을 `.env.local`로 복사하여 Supabase URL과 anon key 입력
-3. Supabase SQL Editor에서 `supabase/schema.sql` 실행, Anonymous Sign-ins 활성화
-4. 서버 재시작 후 `/settings`에서 DB 조회 확인, 보관함에서 DB 업로드 확인
-5. `/map`에서 회전·확대·핀 선택 확인
-6. 공공데이터포털 TourAPI 및 기상청 단기예보 활용신청 후 Decoding 키를 DATA_GO_KR_KEY에 입력
-7. 탐색의 관광정보·국가유산 조회, 연결 설정의 날씨 조회 확인
-8. ANTHROPIC_API_KEY 및 계정에서 사용 가능한 ANTHROPIC_MODEL 설정 후 AI 질문과 도구 호출 결과 확인
+`.env.local`이 이미 있다면 복사 명령으로 덮어쓰지 말고 기존 파일을 수정하세요. `start.cmd`로도 실행할 수 있으며 사용 중인 포트에 따라 표시되는 Local 주소를 확인합니다. `index.html` 더블클릭으로는 실행되지 않습니다.
 
-키를 설정할 때마다 개발 서버를 다시 시작합니다. 국가유산 API는 키가 필요 없습니다. 외부 API의 이용 승인·정책·네트워크 상태에 따라 호출 결과가 달라질 수 있습니다.
+개발 서버는 로컬 API 미들웨어를 포함하므로 `npm run dev`로 화면과 API를 함께 실행합니다. `npm run preview`는 빌드된 정적 화면만 제공하며 API 검증용이 아닙니다.
 
-## 구조
+| 환경변수 | 용도 |
+|---|---|
+| `VITE_SUPABASE_URL` | Supabase Project URL |
+| `VITE_SUPABASE_ANON_KEY` | 공개용 Publishable 또는 기존 anon 키 |
+| `DATA_GO_KR_KEY` | 관광정보·기상청 활용신청을 완료한 Decoding 인증키 |
+| `ANTHROPIC_API_KEY` | 강사가 제공하는 앱 전용 AI 키 |
+| `ANTHROPIC_MODEL` | 과제 안내서 지정 `claude-sonnet-5-5` |
 
-- src/main.jsx: React 진입점
-- src/App.jsx: 최상위 오류 처리 및 BrowserRouter
-- src/router.jsx: 주소별 페이지 구성
-- src/layouts/RootLayout.jsx: 공용 메뉴·푸터
-- src/pages/: 탐색·지도·AI·보관함·연결 설정
-- src/store/useAppStore.js: 즐겨찾기와 메뉴 이동 후 유지되는 AI 대화
-- src/api/client.js: 공용 서버 호출
-- src/lib/supabase.js: Supabase 공개 연결 설정
-- src/scene.jsx: 지연 로딩하는 Three.js 3D 섬과 선택 핀
-- src/style.css: Bootstrap 기반 반응형 디자인
-- api/: Vercel 서버 함수, 비밀키는 서버에서만 사용
-- server/: 관광·기상·유산 도구 함수
-- vite.config.js: 로컬 API 미들웨어, npm run dev 하나로 프론트와 API 실행
-- supabase/schema.sql: 사용자별 RLS가 적용되는 저장 테이블
+Supabase 공개키 자리에 Secret/service_role 키를 넣지 않습니다. 공공데이터·AI 비밀키에 `VITE_`를 붙이지 않습니다. `.env.local`, `.vercel`, `node_modules`, `dist`는 Git에서 제외합니다. AI 키는 코딩 도구용이 아닌 앱 에이전트용입니다.
 
-경로: /, /explore, /map, /agent, /saved, /settings. Store는 브라우저에 저장하며 DB 업로드는 현재 컬렉션을 추가/갱신합니다. DB에서 불러오기는 현재 로그인 세션의 저장 목록을 조회하여 브라우저 목록과 합칩니다. 조회 결과와 건수를 별도로 표시합니다. 같은 브라우저의 세션을 재사용하며, 다른 브라우저는 별도 익명 사용자이므로 동일 목록을 볼 수 없습니다. 북마크 취소는 브라우저에만 적용되며 DB 삭제는 아직 제공하지 않습니다. 3D 지도와 카드 내용은 에디토리얼 예시이며 실제 API 응답으로 표시하지 않습니다. 지도는 개략적인 일러스트입니다.
+## Supabase 설정과 저장 방식
 
-## API와 AI
+1. Supabase에서 Anonymous Sign-Ins를 활성화합니다.
+2. SQL Editor에서 `supabase/schema.sql`을 실행합니다. 개인 즐겨찾기는 사용자별 RLS로 제한됩니다.
+3. `supabase/resident-benefits.sql`을 실행하면 공용 혜택 테이블과 조사 자료 5곳이 생성됩니다. 기존 자료가 있는 경우 같은 ID의 혜택은 이 파일의 조사 자료로 갱신되므로 내용을 확인한 뒤 실행하세요.
+4. 공용 혜택은 누구나 읽을 수 있고 브라우저 사용자는 수정할 수 없습니다.
 
-한국관광공사 TourAPI(KorService2), 기상청 단기예보, 국가유산청 검색 API를 사용합니다. AI는 같은 서버 함수를 tool로 호출하고 최대 5회 도구 루프를 수행합니다. 외부 호출 실패는 화면에 표시하며 샘플 결과로 대체하지 않습니다.
+즐겨찾기 북마크는 브라우저에 유지되며 ‘Supabase에 업로드’로 DB에 추가·갱신합니다. ‘DB에서 불러오기’는 현재 익명 사용자의 목록을 조회해 브라우저 목록과 합칩니다. 북마크 취소는 브라우저 목록에만 적용되므로 DB에서 불러오면 다시 나타날 수 있습니다.
 
-## 빌드 및 Vercel
+다른 브라우저·기기·로컬과 배포 주소는 별도 익명 사용자입니다. 동일 닉네임 기반 기기간 공유·정식 계정 로그인·DB 삭제 동기화는 미구현입니다. AI 대화는 Store 메모리에서 메뉴 이동 시 유지되고 새로고침하면 초기화되며, DB에는 저장하지 않습니다.
 
-`npm run build` → `npm run preview`로 배포 빌드 화면을 확인합니다. preview는 정적 화면만 제공하므로 API 검증은 dev 또는 Vercel에서 합니다.
+## 코드 구조
 
-GitHub 저장소에 .env.local, node_modules, dist를 제외한 소스를 업로드합니다. Vercel에서 저장소 Import → Framework Vite → 환경변수 등록 → Deploy. vercel.json이 SPA 경로를 처리합니다. 배포 후 /explore 직접 접속과 각 API, DB, AI를 다시 확인하세요.
+```text
+api/                 Vercel 서버 함수
+server/              공공 API·혜택 조회, AI 도구 설명과 실행 루프
+src/
+  main.jsx           React 진입점
+  App.jsx            BrowserRouter·오류 경계
+  router.jsx         주소별 페이지
+  layouts/           공용 메뉴·푸터
+  pages/             홈·탐색·지도·AI·보관함·설정
+  components/        카드·혜택 필터·날씨 표·3D 로딩
+  store/             공유 즐겨찾기·AI 대화
+  api/               브라우저의 서버 호출 모음
+  lib/               Supabase·저장/혜택 공용 로직
+  data/              예시 장소·공식 안내 조사 자료
+supabase/            테이블·RLS·초기 자료 SQL
+tests/               도구 조회와 모의 AI 루프 테스트
+docs/                배포·발표·최종 검증 안내
+```
 
-GitHub URL: https://github.com/silich0326-boop/prj
-Vercel URL: https://jeju-local-trip.vercel.app
+## 검사와 AI 검증
 
-발표 요약은 docs/presentation.md를 참고하세요.
+```powershell
+npm test
+npm run lint
+npm run build
+```
 
-## 도민 혜택 5곳
+자동 테스트 3개는 혜택 가격·날짜 검증, 가짜 모델 응답에 따른 혜택→날씨 연속 호출, DB 실패 처리·5회 반복 제한을 확인합니다. **실제 모델의 도구 선택 능력이나 추천 품질을 검증한 것은 아닙니다.**
 
-공식 관람안내를 2026-11-02 확인한 성인 25~64세 개인 입장료 자료입니다. supabase/resident-benefits.sql을 SQL Editor에서 실행하면 읽기 전용 공개 혜택 테이블과 5개 행이 생성됩니다. 기존 즐겨찾기 데이터는 건드리지 않습니다. /benefits-setup에서 SQL을 복사할 수 있습니다.
+AI 키 연결 후 [최종 검증 체크리스트](docs/AGENT-VALIDATION.md)에 따라 실측 결과와 화면 캡처를 추가해야 합니다. 현재 실제 AI 테스트 캡처는 없습니다.
 
-홈 및 탐색 화면은 resident_benefits를 조회합니다. 테이블 미설정·연결 실패 시에는 조사 JSON을 표시하고 DB 연결 전임을 명시합니다. DB가 정상 응답한 빈 목록은 빈 목록 그대로 표시합니다. 일반 요금, 도민 요금, 계산 근거, 증빙, 출처, 확인일, 유효기간 미명시 여부를 함께 표시합니다. 현대미술관 본관·박광진관 2026-11-03~05 임시휴관을 반영합니다. 월요일 휴관 및 공휴일 예외는 공식 공지를 확인해야 합니다. DB 조회가 곧 실시간 요금 검증을 뜻하지는 않습니다.
+## 남은 작업
 
-## 최초 배포 검증 2026-11-02
+- [ ] AI 키를 로컬·Vercel에 등록하고 실제 도구 선택·2개 이상 연속 호출·허위 정보 방지 검증
+- [ ] 실제 AI 테스트 화면 캡처를 README에 추가
+- [ ] 3분 발표 리허설 및 검증된 내용으로 대본 확정
+- [ ] 안내서의 다른 브라우저 동일 사용자 조회까지 맞추려면 계정 로그인 보완
+- [ ] 선택 사항: API·AI 추천 결과를 3D 지도 좌표와 연결
 
-고정 Production 주소에서 비로그인 HTTP 요청 검증: 홈·/explore·/saved 직접 접속 200, 관광 해녀 검색 3건, 제주시 단기예보 6건, 국가유산 관덕정 검색 1건. AI 키는 아직 미설정입니다. 로컬과 배포 주소는 브라우저 저장소 및 익명 로그인 세션이 서로 다르므로 개인 보관함이 자동 공유되지는 않습니다. 공용 혜택 목록은 같은 Supabase 프로젝트에서 조회합니다.
-
-## 구조 정리 및 모바일 점검
-
-390px 화면에서 홈·혜택 보관함·AI 페이지의 가로 넘침 없음, Supabase 혜택 5곳 조회, 혜택 북마크 및 보관함 이동 확인. AI 키 미설정 오류 이후 메뉴 이동을 해도 질문 및 오류 안내가 유지됨을 확인했습니다. 채팅은 Store 메모리에 유지하며 새로고침하면 초기화됩니다. 즐겨찾기 persist 키는 기존 jeju-studio-v2를 유지합니다. 실제 AI 답변과 도구 연속 호출은 키 수령 후 검증합니다.
-
-## AI 도민 혜택 도구
-
-search_resident_benefits는 Supabase resident_benefits를 읽기 전용 조회합니다. 공공 API 3개와 별도의 네 번째 도구입니다. 성인 개인 입장료와 적용 대상·증빙·공식 URL·확인일·유효기간·방문일 휴관 상태를 반환합니다. 실패나 빈 결과는 샘플로 대체하지 않습니다. GET /api/benefits?keyword=해녀 로 AI 키 없이 실제 DB 조회를 확인할 수 있습니다.
-
-LLM 루프는 최대 5회·max_tokens 1024·최근 대화 10개 제한을 유지합니다. 테스트에는 가짜 모델 응답으로 도구 호출 흐름을 확인하며 실제 AI 호출 성공을 뜻하지 않습니다. 키 수령 후 혜택+날씨 연속 조회와 휴관일 회피, 존재하지 않는 혜택 질문을 실제 모델로 검증해야 합니다.
+현재 3D 지도는 고정 예시 핀이 있는 일러스트입니다. 공용 혜택 목록은 실제 DB 조회 결과이며, 일반 탐색 예시 카드와 구분합니다. Three.js 사용과 API 핀 연동은 별도의 구현 상태입니다.
