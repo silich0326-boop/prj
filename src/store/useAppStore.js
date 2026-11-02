@@ -1,7 +1,23 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-export const useAppStore = create(persist(set => ({
+import { askAgent } from '../api/client.js'
+export const useAppStore = create(persist((set,get) => ({
   saved: [],
   replaceSaved: saved => set({saved}),
-  toggle: p => set(s => ({saved: s.saved.some(x => x.id === p.id) ? s.saved.filter(x => x.id !== p.id) : [...s.saved, p]}))
-}), {name:'jeju-studio-v2'}))
+  toggle: p => set(s => ({saved:s.saved.some(x=>x.id===p.id) ? s.saved.filter(x=>x.id!==p.id) : [...s.saved,p]})),
+  messages: [], chatLoading:false, chatError:'',
+  clearChat: () => { if (!get().chatLoading) set({messages:[],chatError:''}) },
+  sendMessage: async text => {
+    const message = text.trim()
+    if (!message || get().chatLoading) return
+    const history = get().messages.filter(m=>!m.failed).slice(-10).map(m=>({role:m.role,content:m.content}))
+    const entry = {role:'user',content:message}
+    set(s=>({messages:[...s.messages,entry],chatLoading:true,chatError:''}))
+    try {
+      const result = await askAgent(message,history)
+      set(s=>({messages:[...s.messages,{role:'assistant',content:result.answer,steps:result.steps}]}))
+    } catch(e) {
+      set(s=>({chatError:e.message,messages:s.messages.map(m=>m===entry?{...m,failed:true}:m)}))
+    } finally { set({chatLoading:false}) }
+  }
+}), {name:'jeju-studio-v2', partialize:s=>({saved:s.saved})}))

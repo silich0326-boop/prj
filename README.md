@@ -22,7 +22,13 @@ Node.js 설치 후 이 폴더에서 `npm install`, `npm run dev`를 실행하고
 ## 구조
 
 - src/main.jsx: React 진입점
-- src/App.jsx: Router, Zustand persist store, UI, Supabase 연결
+- src/App.jsx: 최상위 오류 처리 및 BrowserRouter
+- src/router.jsx: 주소별 페이지 구성
+- src/layouts/RootLayout.jsx: 공용 메뉴·푸터
+- src/pages/: 탐색·지도·AI·보관함·연결 설정
+- src/store/useAppStore.js: 즐겨찾기와 메뉴 이동 후 유지되는 AI 대화
+- src/api/client.js: 공용 서버 호출
+- src/lib/supabase.js: Supabase 공개 연결 설정
 - src/scene.jsx: 지연 로딩하는 Three.js 3D 섬과 선택 핀
 - src/style.css: Bootstrap 기반 반응형 디자인
 - api/: Vercel 서버 함수, 비밀키는 서버에서만 사용
@@ -56,3 +62,7 @@ Vercel URL: https://jeju-local-trip.vercel.app
 ## 최초 배포 검증 2026-11-02
 
 고정 Production 주소에서 비로그인 HTTP 요청 검증: 홈·/explore·/saved 직접 접속 200, 관광 해녀 검색 3건, 제주시 단기예보 6건, 국가유산 관덕정 검색 1건. AI 키는 아직 미설정입니다. 로컬과 배포 주소는 브라우저 저장소 및 익명 로그인 세션이 서로 다르므로 개인 보관함이 자동 공유되지는 않습니다. 공용 혜택 목록은 같은 Supabase 프로젝트에서 조회합니다.
+
+## 구조 정리 및 모바일 점검
+
+390px 화면에서 홈·혜택 보관함·AI 페이지의 가로 넘침 없음, Supabase 혜택 5곳 조회, 혜택 북마크 및 보관함 이동 확인. AI 키 미설정 오류 이후 메뉴 이동을 해도 질문 및 오류 안내가 유지됨을 확인했습니다. 채팅은 Store 메모리에 유지하며 새로고침하면 초기화됩니다. 즐겨찾기 persist 키는 기존 jeju-studio-v2를 유지합니다. 실제 AI 답변과 도구 연속 호출은 키 수령 후 검증합니다.

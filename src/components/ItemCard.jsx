@@ -1,0 +1,5 @@
+import { places } from '../data/places'
+import { useAppStore as useStore } from '../store/useAppStore'
+import BenefitCard from './BenefitCard'
+import Icon from './Icon'
+export default function Card({p}){p=places.find(place=>place.id===p.id)||p;const {saved,toggle}=useStore();const active=saved.some(x=>x.id===p.id);if(p.benefit)return <BenefitCard benefit={p.benefit}/>;return <article className="place-card"><div className="card-art" style={{background:p.color}}><Icon name={p.icon}/><span>{p.area}</span></div><div className="p-4"><div className="d-flex justify-content-between align-items-center"><small className="eyebrow">{p.tag}</small><button className={'save '+(active?'active':'')} onClick={()=>toggle(p)} aria-label={p.name+(active?' 저장 취소':' 저장')}><Icon name={active?'bookmark-fill':'bookmark'}/></button></div><h3>{p.name}</h3><p>{p.desc}</p><div className="benefit-status"><span><Icon name="ticket-perforated"/> 도민 혜택 확인 전</span><small>적용 여부 · 증빙 조건 · 유효기간 확인 필요</small></div></div></article>}
