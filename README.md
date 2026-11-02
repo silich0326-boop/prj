@@ -42,8 +42,8 @@ Node.js 설치 후 이 폴더에서 `npm install`, `npm run dev`를 실행하고
 
 GitHub 저장소에 .env.local, node_modules, dist를 제외한 소스를 업로드합니다. Vercel에서 저장소 Import → Framework Vite → 환경변수 등록 → Deploy. vercel.json이 SPA 경로를 처리합니다. 배포 후 /explore 직접 접속과 각 API, DB, AI를 다시 확인하세요.
 
-GitHub URL: 미배포
-Vercel URL: 미배포
+GitHub URL: https://github.com/silich0326-boop/prj
+Vercel URL: https://jeju-local-trip.vercel.app
 
 발표 요약은 docs/presentation.md를 참고하세요.
 
@@ -52,3 +52,7 @@ Vercel URL: 미배포
 공식 관람안내를 2026-11-02 확인한 성인 25~64세 개인 입장료 자료입니다. supabase/resident-benefits.sql을 SQL Editor에서 실행하면 읽기 전용 공개 혜택 테이블과 5개 행이 생성됩니다. 기존 즐겨찾기 데이터는 건드리지 않습니다. /benefits-setup에서 SQL을 복사할 수 있습니다.
 
 홈 및 탐색 화면은 resident_benefits를 조회합니다. 테이블 미설정·연결 실패 시에는 조사 JSON을 표시하고 DB 연결 전임을 명시합니다. DB가 정상 응답한 빈 목록은 빈 목록 그대로 표시합니다. 일반 요금, 도민 요금, 계산 근거, 증빙, 출처, 확인일, 유효기간 미명시 여부를 함께 표시합니다. 현대미술관 본관·박광진관 2026-11-03~05 임시휴관을 반영합니다. 월요일 휴관 및 공휴일 예외는 공식 공지를 확인해야 합니다. DB 조회가 곧 실시간 요금 검증을 뜻하지는 않습니다.
+
+## 최초 배포 검증 2026-11-02
+
+고정 Production 주소에서 비로그인 HTTP 요청 검증: 홈·/explore·/saved 직접 접속 200, 관광 해녀 검색 3건, 제주시 단기예보 6건, 국가유산 관덕정 검색 1건. AI 키는 아직 미설정입니다. 로컬과 배포 주소는 브라우저 저장소 및 익명 로그인 세션이 서로 다르므로 개인 보관함이 자동 공유되지는 않습니다. 공용 혜택 목록은 같은 Supabase 프로젝트에서 조회합니다.
