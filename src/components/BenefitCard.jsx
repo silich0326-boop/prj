@@ -28,7 +28,7 @@ export default function BenefitCard({ benefit:b, visitDate='' }) {
       {visitDate && new Date(visitDate+'T12:00:00+09:00').getUTCDay()===1 && <p className="benefit-closure">선택일은 월요일입니다. 공휴일 예외를 제외하면 정기휴관일이므로 방문 전 확인하세요.</p>}
       {closure && <p className="benefit-closure is-closed">선택일에는 본관 이용이 불가합니다. 다른 장소나 날짜를 선택해 주세요.</p>}
       <div className="benefit-source"><a href={b.source_url} target="_blank" rel="noreferrer">공식 관람안내 <i className="bi bi-box-arrow-up-right"/></a><small>확인일 {formatBenefitDate(b.verified_on)}</small></div>
-      <div className="benefit-cart-action">{inCart?<Link className="btn btn-outline-dark" to="/cart" aria-label={b.name+' 장바구니에서 보기'}><i className="bi bi-check2 me-2"/>장바구니에서 보기</Link>:<button className="btn btn-dark" onClick={()=>addToCart(b.id)} aria-label={b.name+' 나들이에 담기'}><i className="bi bi-bag-plus me-2"/>나들이에 담기</button>}</div>
+      <div className="benefit-cart-action">{inCart?<Link className="btn btn-outline-dark" to="/cart" aria-label={b.name+' 장바구니에서 보기'}><i className="bi bi-check2 me-2"/>장바구니에서 보기</Link>:<button className="btn btn-dark" onClick={()=>addToCart(b.id,b.name)} aria-label={b.name+' 나들이에 담기'}><i className="bi bi-bag-plus me-2"/>나들이에 담기</button>}</div>
     </div>
   </article>
 }

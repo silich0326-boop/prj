@@ -52,6 +52,10 @@ export default function Home({ places, Scene }) {
       <div className="section-title"><div><small className="eyebrow">A LITTLE CLOSER TO HOME</small><h2>이런 나들이는 어때요?</h2></div></div>
       <div className="occasion-grid">{suggestions.map(([icon,title,sub,prompt])=><button key={title} className="occasion-card" onClick={()=>navigate('/agent',{state:{prompt}})}><i className={'bi bi-'+icon}/><span><strong>{title}</strong><small>{sub}</small></span><i className="bi bi-arrow-up-right"/></button>)}</div>
     </section>
+    <section className="basket-intro" aria-labelledby="basket-intro-title">
+      <div className="basket-intro-copy"><small className="eyebrow">YOUR DAY, YOUR SAVINGS</small><h2 id="basket-intro-title">갈 곳을 담고,<br/>도민 혜택으로 얼마나 아끼는지 확인하세요.</h2><p>혜택 카드에서 마음에 드는 장소를 담아보세요.<br/>성인 도민 인원을 고르면 입장료와 예상 절약액을 함께 비교할 수 있습니다.</p><div className="basket-intro-actions"><a href="#resident-benefits" className="btn btn-dark">혜택 장소 골라 담기 <i className="bi bi-arrow-down" aria-hidden="true"/></a><Link to="/cart" className="btn btn-outline-dark">내 장바구니 보기</Link></div><small className="basket-intro-note">예약·결제 없이 입장료를 비교합니다. 장바구니는 이 브라우저에 저장됩니다.</small></div>
+      <ol className="basket-steps"><li><span aria-hidden="true">01</span><div><strong>마음에 드는 장소 담기</strong><p>공식 출처와 도민 혜택 조건을 확인하세요.</p></div></li><li><span aria-hidden="true">02</span><div><strong>인원과 방문일 고르기</strong><p>성인 도민 인원을 입력하고 등록된 휴관을 확인하세요.</p></div></li><li><span aria-hidden="true">03</span><div><strong>입장료와 절약액 비교</strong><p>일반 요금과 도민 요금을 한눈에 비교하세요.</p></div></li></ol>
+    </section>
     <ResidentBenefits/>
     <section className="resident-promise">
       <div><small className="eyebrow">BENEFITS YOU CAN CHECK</small><h2>혜택만큼 중요한 건,<br/>정확한 이용 조건.</h2><p>확인된 도민 혜택을 우선하고,<br/>불확실한 정보는 확인 필요로 안내합니다.</p></div>
