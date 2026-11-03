@@ -44,3 +44,50 @@
 .collection-notice .btn{padding:9px 12px}
 .notice-close{border:0;background:transparent;color:var(--ink);font-size:24px;min-width:40px;min-height:40px}
 @media(max-width:540px){.collection-notice{right:16px;bottom:14px;flex-wrap:wrap}.collection-notice>div{margin-left:auto}.collection-notice p{flex-basis:100%}}
+
+/* Local-trip basket: compare verified adult admission rates. */
+.header-actions{display:flex;align-items:center;gap:21px;flex-shrink:0}
+.header-actions .collection-link{white-space:nowrap;font-size:12px}
+.benefit-cart-action{margin-top:18px}
+.benefit-cart-action .btn{display:inline-flex;align-items:center;justify-content:center;width:100%;min-height:44px}
+.benefit-cart-action .btn .bi{margin-left:0}
+.cart-toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:24px 0}
+.cart-options{display:flex;align-items:flex-end;gap:22px;flex-wrap:wrap;margin:28px 0 14px}
+.cart-options label{display:flex;flex-direction:column;gap:9px;font-size:14px;font-weight:600;min-width:200px;max-width:100%}
+.cart-options label>span{font-size:11px;color:var(--muted);font-weight:400}
+.cart-options input{font-size:16px;min-height:46px;padding:10px 13px;border:1px solid #bec9bb;border-radius:5px;background:#fffef9;color:var(--ink);width:100%;max-width:100%}
+.cart-layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr);gap:30px;align-items:start;margin-top:28px}
+.cart-list{display:flex;flex-direction:column;gap:20px;min-width:0}
+.cart-item{border:1px solid var(--line);border-radius:10px;background:#fffef9;padding:25px;min-width:0;overflow-wrap:anywhere}
+.cart-item-heading{display:flex;justify-content:space-between;align-items:start;gap:12px}
+.cart-item-heading small{color:var(--muted);font-size:11px}
+.cart-item h2{font-size:22px;line-height:1.5;margin:8px 0 15px;letter-spacing:-.6px}
+.cart-item-heading .btn{flex-shrink:0;padding:9px 12px;min-height:44px}
+.cart-item-prices{display:flex;gap:12px;flex-wrap:wrap;align-items:baseline;margin:10px 0 12px}
+.cart-item-prices>span{font-size:13px;color:var(--muted)}
+.cart-item-prices strong{font-size:25px;color:var(--ink)}
+.cart-documents{font-size:13px;line-height:1.85;margin-top:20px}
+.cart-documents strong{margin-right:8px}
+.cart-warning{background:#f8edd7;color:#785b2c;border-radius:5px;padding:11px 13px;font-size:12px;line-height:1.8;margin:10px 0;overflow-wrap:anywhere}
+.cart-item details{font-size:12px;line-height:1.9;margin:18px 0}
+.cart-item summary{cursor:pointer;font-weight:500}
+.cart-item details p{margin:12px 0 0}
+.cart-item-source{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:16px;font-size:11px;margin-top:20px}
+.cart-item-source a,.cart-saved-link{text-decoration:underline;text-underline-offset:3px}
+.cart-item-source span{color:var(--muted)}
+.cart-summary{position:sticky;top:24px;background:#eaf0e4;border:1px solid #d6e1cd;border-radius:10px;padding:26px;min-width:0;overflow-wrap:anywhere}
+.cart-summary h2{font-size:22px;margin:0 0 14px;font-weight:700}
+.cart-summary>p{font-size:13px;line-height:1.9}
+.cart-summary dl{margin:25px 0}
+.cart-summary dl>div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:16px 0;flex-wrap:wrap}
+.cart-summary dt{font-size:13px;font-weight:400}
+.cart-summary dd{margin:0;font-size:18px;font-weight:600}
+.cart-summary .cart-resident-total{border-top:1px solid #ccd8c2;padding-top:20px;margin-top:20px}
+.cart-resident-total dd{font-size:29px;font-weight:700;letter-spacing:-1px}
+.cart-savings{color:#3e6b46}
+.cart-summary .caption{font-size:11px;line-height:1.9;color:#63735e}
+.cart-saved-link{font-size:12px;display:inline-block;margin-top:8px}
+.cart-notice{padding:13px 16px;background:#edf3e7;border-radius:6px;display:flex;align-items:center;gap:15px;justify-content:space-between;font-size:13px;line-height:1.8;flex-wrap:wrap}
+@media(max-width:1100px){.brand small{display:none}.header-actions{gap:14px}}
+@media(max-width:850px){.cart-layout{grid-template-columns:1fr}.cart-summary{position:static;order:-1}.cart-options{gap:18px}.cart-item{padding:20px}.cart-summary{padding:24px}}
+@media(max-width:540px){.header-actions{gap:14px}.header-actions .collection-link{gap:6px;min-height:38px}.header-actions .collection-link>span{display:none}.cart-options label{min-width:0;width:100%}.cart-options input{width:100%}.cart-toolbar .btn{padding:11px 13px}.cart-item h2{font-size:20px}.cart-resident-total dd{font-size:27px}.cart-summary dl>div{gap:8px}.benefit-cart-action .btn{font-size:12px}}
