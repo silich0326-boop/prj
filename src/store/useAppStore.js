@@ -2,12 +2,14 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { askAgent } from '../api/client.js'
 import { switchCollection, guestBookmarks } from '../lib/collection-scope.js'
+import { supabase } from '../lib/supabase.js'
+import { favoriteActions } from './favoriteActions.js'
 export const useAppStore = create(persist((set,get) => ({
   saved: [], savedOwner:null, savedBuckets:{}, lastGuestOwner:null,
-  switchUser: user => set(s=>switchCollection(s,user)),
+  ...favoriteActions(set,get,supabase),
+  switchUser: user => set(s=>{const patch=switchCollection(s,user);return {...patch,collectionReady:true,...(patch.savedOwner?{favoriteNotice:null,favoriteUndo:null}:{})}}),
   importGuest: () => set(s=>({saved:[...new Map([...s.saved,...guestBookmarks(s)].map(p=>[p.id,p])).values()]})),
   replaceSaved: saved => set({saved}),
-  toggle: p => set(s => ({saved:s.saved.some(x=>x.id===p.id) ? s.saved.filter(x=>x.id!==p.id) : [...s.saved,p]})),
   messages: [], chatLoading:false, chatError:'',
   clearChat: () => { if (!get().chatLoading) set({messages:[],chatError:''}) },
   sendMessage: async text => {

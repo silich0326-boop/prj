@@ -5,7 +5,7 @@ import path from 'node:path'
 
 const projectRoot = fileURLToPath(new URL('.', import.meta.url))
 const routes = new Set(['hello', 'tour', 'weather', 'heritage', 'agent', 'benefits'])
-const serverKeys = ['DATA_GO_KR_KEY', 'ANTHROPIC_API_KEY', 'ANTHROPIC_MODEL', 'VITE_SUPABASE_URL', 'VITE_SUPABASE_ANON_KEY']
+const serverKeys = ['DATA_GO_KR_KEY', 'ANTHROPIC_API_KEY', 'ANTHROPIC_MODEL', 'AI_PROVIDER', 'OPENAI_API_KEY', 'OPENAI_MODEL', 'VITE_SUPABASE_URL', 'VITE_SUPABASE_ANON_KEY']
 
 function localApi() {
   return {

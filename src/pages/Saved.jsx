@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import AccountPanel from '../components/AccountPanel'
 import { useSessionStore } from '../store/useSessionStore'
+import { useAppStore } from '../store/useAppStore'
 import { Link } from 'react-router-dom'
 import { readFavorites, uploadFavorites, combineFavorites, favoriteUser } from '../lib/favorites'
 
@@ -16,10 +17,11 @@ export default function Saved({ saved, setSaved, getSaved, catalog, db, Card, He
   const queried=queryData?.owner===owner?queryData.rows:null
   const setStatus=text=>setStatusData({owner:useSessionStore.getState().user?.id||null,text})
   const setError=text=>setErrorData({owner:useSessionStore.getState().user?.id||null,text})
-  const locked=!!busy||!ready||changing||!!sessionError
+  const collectionBusy=useAppStore(s=>s.collectionBusy)
+  const locked=!!busy||!!collectionBusy||!ready||changing||!!sessionError
 
   async function run(action) {
-    if (locked) return
+    if (locked||!useAppStore.getState().beginCollectionOperation(action)) return
     setBusy(action)
     setStatus('')
     setError('')
@@ -40,6 +42,7 @@ export default function Saved({ saved, setSaved, getSaved, catalog, db, Card, He
       setError(e.message || '처리하지 못했습니다. 다시 시도해 주세요.')
     } finally {
       setBusy('')
+      useAppStore.getState().finishCollectionOperation()
     }
   }
 
@@ -55,11 +58,11 @@ export default function Saved({ saved, setSaved, getSaved, catalog, db, Card, He
         {busy === 'upload' ? '저장 중…' : 'Supabase에 업로드'}
       </button>
     </div>
-    <p className="caption">같은 이메일 계정으로 로그인하면 다른 브라우저에서도 업로드한 목록을 조회할 수 있습니다. 비회원 보관함은 해당 브라우저에서만 사용할 수 있습니다. 업로드하지 않은 장소는 브라우저에만 남습니다. 북마크 취소는 현재 브라우저 목록에만 적용됩니다.</p>
+    <p className="caption">같은 이메일 계정으로 로그인하면 다른 브라우저에서도 업로드한 목록을 조회할 수 있습니다. 비회원 보관함은 해당 브라우저에서만 사용할 수 있습니다. 업로드하지 않은 장소는 브라우저에만 남습니다. 저장 취소 시 현재 계정의 DB에서도 삭제하며, 알림에서 되돌릴 수 있습니다.</p>
     {status && <p role="status" className="alert alert-success">{status}</p>}
     {error && <p role="alert" className="alert alert-warning">{error}</p>}
     {queried !== null && <div className="db-query-result mb-4">
-      <strong><i className="bi bi-database-check me-2"/>이번 DB 조회 결과 · {queried.length}개</strong>
+      <strong><i className="bi bi-database-check me-2"/>마지막 DB 조회 결과 · {queried.length}개</strong>
       {queried.length ? <ul>{queried.map(row => <li key={row.item_id}>{row.title}</li>)}</ul> :
         <p>현재 로그인 사용자에게 저장된 장소가 없습니다. 먼저 보관함을 업로드해 주세요.</p>}
     </div>}

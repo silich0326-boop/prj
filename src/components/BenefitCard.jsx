@@ -1,15 +1,18 @@
 import { useAppStore } from '../store/useAppStore'
+import { useSessionStore } from '../store/useSessionStore'
 import { benefitToPlace, formatBenefitDate, temporaryClosure } from '../lib/benefits'
 export default function BenefitCard({ benefit:b, visitDate='' }) {
   const saved = useAppStore(s => s.saved)
   const toggle = useAppStore(s => s.toggle)
   const active = saved.some(p => p.id === b.id)
+  const blocked=useAppStore(s=>!!s.collectionBusy||!s.collectionReady)
+  const changing=useSessionStore(s=>s.changing)
   const closure = temporaryClosure(b, visitDate)
   const saving = b.regular_price-b.resident_price
   return <article className="place-card benefit-card">
     <div className="card-art" style={{background:b.color}}><i className={'bi bi-'+b.icon}/><span>{b.region} · {b.area}</span><b className="benefit-label">성인 도민 50% 감면</b></div>
     <div className="p-4">
-      <div className="d-flex justify-content-between align-items-center"><small className="eyebrow">{b.space_type}</small><button className={'save '+(active?'active':'')} onClick={()=>toggle(benefitToPlace(b))} aria-label={b.name+(active?' 저장 취소':' 저장')} aria-pressed={active}><i className={'bi bi-'+(active?'bookmark-fill':'bookmark')}/></button></div>
+      <div className="d-flex justify-content-between align-items-center"><small className="eyebrow">{b.space_type}</small><button className={'save '+(active?'active':'')} disabled={blocked||changing} onClick={()=>toggle(benefitToPlace(b))} aria-label={b.name+(active?' 저장 취소':' 저장')} aria-pressed={active}><i className={'bi bi-'+(active?'bookmark-fill':'bookmark')}/></button></div>
       <h3>{b.name}</h3>
       <div className="benefit-prices"><s>{b.regular_price.toLocaleString()}원</s><strong>{b.resident_price.toLocaleString()}원</strong><span>{saving.toLocaleString()}원 절약</span></div>
       <small className="benefit-basis">성인 {b.adult_min_age}~{b.adult_max_age}세 · 1인 입장료 기준</small>
